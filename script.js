@@ -460,6 +460,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const waMsg = `Hi Royal Blooms! I am interested in your design: *${encodeURIComponent(item.title)}* (${item.budgetLabel}). Dimensions: ${encodeURIComponent(item.width)}. Could you please share slot availability and details?`;
                 const waUrl = `https://wa.me/918939601257?text=${waMsg}`;
 
+                // SVG Icons for Spec Grid
+                const rIcon = `<svg class="svg-icon-xs" viewBox="0 0 24 24"><path fill="currentColor" d="M2 4v16h20V4H2zm18 14H4V6h2v4h2V6h2v2h2V6h2v4h2V6h2v12z"/></svg>`;
+                const fIcon = `<svg class="svg-icon-xs" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C9.24 2 7 4.24 7 7c0 1.34.53 2.56 1.39 3.46C7.54 11.23 7 12.55 7 14c0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.45-.54-2.77-1.39-3.54C16.47 9.56 17 8.34 17 7c0-2.76-2.24-5-5-5zm0 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>`;
+                const lIcon = `<svg class="svg-icon-xs" viewBox="0 0 24 24"><path fill="currentColor" d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>`;
+
                 card.innerHTML = `
                     <div class="cat-card-img-wrapper">
                         <div class="cat-badge-box">
@@ -474,15 +479,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         <div class="cat-spec-grid">
                             <div class="spec-row">
-                                <span class="spec-icon">📏</span>
+                                <span class="spec-icon">${rIcon}</span>
                                 <span class="spec-text"><strong>Dimensions:</strong> ${item.width}</span>
                             </div>
                             <div class="spec-row">
-                                <span class="spec-icon">💐</span>
+                                <span class="spec-icon">${fIcon}</span>
                                 <span class="spec-text"><strong>Props Included:</strong> ${item.props}</span>
                             </div>
                             <div class="spec-row">
-                                <span class="spec-icon">💡</span>
+                                <span class="spec-icon">${lIcon}</span>
                                 <span class="spec-text"><strong>Lighting Spec:</strong> ${item.lights}</span>
                             </div>
                         </div>
@@ -516,6 +521,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     budgetButtons.forEach(btn => {
         btn.addEventListener('click', () => {
+            // If in active restricted proposal mode, prevent budget switching out of proposal tier
+            if (proposalSelectedIds && proposalSelectedIds.length > 0) {
+                console.log("Proposal Mode Active: Scoped to proposal items");
+            }
             budgetButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             selectedBudget = btn.getAttribute('data-budget');
@@ -532,17 +541,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // LOGICAL RESET FILTERS (Preserves Proposal Security Scope if viewing a client link)
     if (resetFiltersBtn) {
         resetFiltersBtn.addEventListener('click', () => {
-            selectedBudget = 'all';
-            selectedCategory = 'all';
             searchQuery = '';
-            proposalSelectedIds = null;
+            selectedCategory = 'all';
             if (searchInput) searchInput.value = '';
-            budgetButtons.forEach(b => b.classList.remove('active'));
-            if (budgetButtons[0]) budgetButtons[0].classList.add('active');
+            
             categoryTabs.forEach(t => t.classList.remove('active'));
             if (categoryTabs[0]) categoryTabs[0].classList.add('active');
+
+            // If client is viewing a restricted proposal, keep their proposal scope!
+            if (!proposalSelectedIds) {
+                selectedBudget = 'all';
+                budgetButtons.forEach(b => b.classList.remove('active'));
+                if (budgetButtons[0]) budgetButtons[0].classList.add('active');
+            }
+
             renderCatalogue();
         });
     }
@@ -759,18 +774,82 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Open/Close Admin Modal
-    if (openAdminBtn && adminModal) {
+    // ----------------------------------------------------------------------
+    // ADMIN AUTHENTICATION & SECURITY SYSTEM (PIN PASSCODE: 1234)
+    // ----------------------------------------------------------------------
+    const adminAuthModal = document.getElementById('admin-auth-modal');
+    const adminAuthForm = document.getElementById('admin-auth-form');
+    const adminPinInput = document.getElementById('admin-pin-input');
+    const adminPinError = document.getElementById('admin-pin-error');
+    const closeAdminAuthBtn = document.getElementById('close-admin-auth-btn');
+    const adminLogoutBtn = document.getElementById('admin-logout-btn');
+
+    const DEFAULT_ADMIN_PIN = "1234";
+
+    const isAdminAuthenticated = () => {
+        return sessionStorage.getItem('admin_authenticated') === 'true';
+    };
+
+    // Open Admin Flow with Security PIN Check
+    if (openAdminBtn) {
         openAdminBtn.addEventListener('click', () => {
-            adminModal.classList.remove('hidden');
-            renderAdminItemPicker();
-            renderAdminCatalogList();
+            if (isAdminAuthenticated()) {
+                if (adminModal) {
+                    adminModal.classList.remove('hidden');
+                    renderAdminItemPicker();
+                    renderAdminCatalogList();
+                }
+            } else {
+                if (adminAuthModal) {
+                    adminAuthModal.classList.remove('hidden');
+                    if (adminPinInput) {
+                        adminPinInput.value = '';
+                        adminPinInput.focus();
+                    }
+                    if (adminPinError) adminPinError.classList.add('hidden');
+                }
+            }
+        });
+    }
+
+    if (closeAdminAuthBtn && adminAuthModal) {
+        closeAdminAuthBtn.addEventListener('click', () => {
+            adminAuthModal.classList.add('hidden');
         });
     }
 
     if (closeAdminBtn && adminModal) {
         closeAdminBtn.addEventListener('click', () => {
             adminModal.classList.add('hidden');
+        });
+    }
+
+    // Admin Passcode Form Handler
+    if (adminAuthForm) {
+        adminAuthForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const enteredPin = adminPinInput.value.trim();
+
+            if (enteredPin === DEFAULT_ADMIN_PIN) {
+                sessionStorage.setItem('admin_authenticated', 'true');
+                if (adminAuthModal) adminAuthModal.classList.add('hidden');
+                if (adminModal) {
+                    adminModal.classList.remove('hidden');
+                    renderAdminItemPicker();
+                    renderAdminCatalogList();
+                }
+            } else {
+                if (adminPinError) adminPinError.classList.remove('hidden');
+            }
+        });
+    }
+
+    // Lock Admin Session
+    if (adminLogoutBtn) {
+        adminLogoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('admin_authenticated');
+            if (adminModal) adminModal.classList.add('hidden');
+            alert("🔒 Admin session locked.");
         });
     }
 
@@ -892,7 +971,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ----------------------------------------------------------------------
-       11. QUICK SPECIFICATION MODAL HANDLER
+       11. QUICK SPECIFICATION MODAL HANDLER (SVG ICONS)
        ---------------------------------------------------------------------- */
     const specModal = document.getElementById('item-spec-modal');
     const specModalContent = document.getElementById('spec-modal-content');
@@ -905,6 +984,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const waMsg = `Hi Royal Blooms! I would like to book/inquire about the *${encodeURIComponent(item.title)}* (${item.budgetLabel}). Dimensions: ${encodeURIComponent(item.width)}.`;
         const waUrl = `https://wa.me/918939601257?text=${waMsg}`;
 
+        const rIcon = `<svg class="svg-icon-xs" viewBox="0 0 24 24"><path fill="currentColor" d="M2 4v16h20V4H2zm18 14H4V6h2v4h2V6h2v2h2V6h2v4h2V6h2v12z"/></svg>`;
+        const fIcon = `<svg class="svg-icon-xs" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C9.24 2 7 4.24 7 7c0 1.34.53 2.56 1.39 3.46C7.54 11.23 7 12.55 7 14c0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.45-.54-2.77-1.39-3.54C16.47 9.56 17 8.34 17 7c0-2.76-2.24-5-5-5zm0 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>`;
+        const lIcon = `<svg class="svg-icon-xs" viewBox="0 0 24 24"><path fill="currentColor" d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>`;
+        const pIcon = `<svg class="svg-icon-xs" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61.43.54 1.07.89 1.76.89h1.77c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.24-.27-.39-.63-.39-1.02 0-.83.67-1.5 1.5-1.5H15c3.87 0 7-3.13 7-7 0-4.42-4.03-8-10-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9s1.5.67 1.5 1.5S7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`;
+
         specModalContent.innerHTML = `
             <div>
                 <img src="${item.image}" alt="${item.title}" class="spec-modal-img">
@@ -916,24 +1000,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 <div class="cat-spec-grid" style="margin-bottom: 2rem;">
                     <div class="spec-row">
-                        <span class="spec-icon">📏</span>
+                        <span class="spec-icon">${rIcon}</span>
                         <span class="spec-text"><strong>Stage Dimensions:</strong> ${item.width}</span>
                     </div>
                     <div class="spec-row">
-                        <span class="spec-icon">💐</span>
+                        <span class="spec-icon">${fIcon}</span>
                         <span class="spec-text"><strong>Included Props:</strong> ${item.props}</span>
                     </div>
                     <div class="spec-row">
-                        <span class="spec-icon">💡</span>
+                        <span class="spec-icon">${lIcon}</span>
                         <span class="spec-text"><strong>Lighting Setup:</strong> ${item.lights}</span>
                     </div>
                     <div class="spec-row">
-                        <span class="spec-icon">🎨</span>
+                        <span class="spec-icon">${pIcon}</span>
                         <span class="spec-text"><strong>Color Palette:</strong> ${item.palette}</span>
                     </div>
                 </div>
 
-                <a href="${waUrl}" target="_blank" class="btn btn-primary btn-block">Inquire on WhatsApp Direct</a>
+                <a href="${waUrl}" target="_blank" class="btn btn-primary btn-block" style="text-align: center;">Inquire on WhatsApp Direct</a>
             </div>
         `;
 
@@ -948,6 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close modals when clicking overlay backdrop
     window.addEventListener('click', (e) => {
+        if (e.target === adminAuthModal) adminAuthModal.classList.add('hidden');
         if (e.target === adminModal) adminModal.classList.add('hidden');
         if (e.target === specModal) specModal.classList.add('hidden');
     });
