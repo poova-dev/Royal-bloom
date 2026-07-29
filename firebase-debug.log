@@ -1,0 +1,48 @@
+[debug] [2026-07-29T06:00:03.759Z] ----------------------------------------------------------------------
+[debug] [2026-07-29T06:00:03.763Z] Command:       /usr/local/bin/node /Users/admin/.npm/_npx/ba4f1959e38407b5/node_modules/.bin/firebase apps:list WEB --project decor-f09fb
+[debug] [2026-07-29T06:00:03.764Z] CLI Version:   15.24.0
+[debug] [2026-07-29T06:00:03.764Z] Platform:      darwin
+[debug] [2026-07-29T06:00:03.764Z] Node Version:  v24.16.0
+[debug] [2026-07-29T06:00:03.764Z] Detected Agent: antigravity
+[debug] [2026-07-29T06:00:03.764Z] Time:          Wed Jul 29 2026 11:30:03 GMT+0530 (India Standard Time)
+[debug] [2026-07-29T06:00:03.764Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-07-29T06:00:03.796Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-07-29T06:00:03.797Z] > authorizing via signed-in user (editingonly2004@gmail.com)
+[debug] [2026-07-29T06:00:03.814Z] Checked if tokens are valid: true, expires at: 1785308052995
+[debug] [2026-07-29T06:00:03.814Z] Checked if tokens are valid: true, expires at: 1785308052995
+[debug] [2026-07-29T06:00:03.815Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps pageSize=100
+[debug] [2026-07-29T06:00:04.505Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps 403
+[debug] [2026-07-29T06:00:04.505Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-07-29T06:00:04.507Z] Request to https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps?pageSize=100 had HTTP Error: 403, The caller does not have permission
+[debug] [2026-07-29T06:00:04.948Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps?pageSize=100 had HTTP Error: 403, The caller does not have permission
+    at responseToError (/Users/admin/.npm/_npx/ba4f1959e38407b5/node_modules/firebase-tools/lib/responseToError.js:53:12)
+    at RetryOperation._fn (/Users/admin/.npm/_npx/ba4f1959e38407b5/node_modules/firebase-tools/lib/apiv2.js:415:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[error] 
+[error] Error: Failed to list Firebase WEB apps. See firebase-debug.log for more info.
+[debug] [2026-07-29T06:01:12.572Z] ----------------------------------------------------------------------
+[debug] [2026-07-29T06:01:12.575Z] Command:       /usr/local/bin/node /Users/admin/.npm/_npx/ba4f1959e38407b5/node_modules/.bin/firebase apps:create WEB Decoor Web App --project decor-f09fb
+[debug] [2026-07-29T06:01:12.575Z] CLI Version:   15.24.0
+[debug] [2026-07-29T06:01:12.576Z] Platform:      darwin
+[debug] [2026-07-29T06:01:12.576Z] Node Version:  v24.16.0
+[debug] [2026-07-29T06:01:12.576Z] Detected Agent: antigravity
+[debug] [2026-07-29T06:01:12.576Z] Time:          Wed Jul 29 2026 11:31:12 GMT+0530 (India Standard Time)
+[debug] [2026-07-29T06:01:12.576Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-07-29T06:01:12.604Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-07-29T06:01:12.605Z] > authorizing via signed-in user (editingonly2004@gmail.com)
+[info] Create your WEB app in project decor-f09fb:
+[debug] [2026-07-29T06:01:12.617Z] Checked if tokens are valid: true, expires at: 1785308052995
+[debug] [2026-07-29T06:01:12.617Z] Checked if tokens are valid: true, expires at: 1785308052995
+[debug] [2026-07-29T06:01:12.619Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps [none]
+[debug] [2026-07-29T06:01:12.619Z] >>> [apiv2][body] POST https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps {"displayName":"Decoor Web App"}
+[debug] [2026-07-29T06:01:13.556Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps 403
+[debug] [2026-07-29T06:01:13.556Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-07-29T06:01:13.557Z] Request to https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps had HTTP Error: 403, The caller does not have permission
+[debug] [2026-07-29T06:01:13.937Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/decor-f09fb/webApps had HTTP Error: 403, The caller does not have permission
+    at responseToError (/Users/admin/.npm/_npx/ba4f1959e38407b5/node_modules/firebase-tools/lib/responseToError.js:53:12)
+    at RetryOperation._fn (/Users/admin/.npm/_npx/ba4f1959e38407b5/node_modules/firebase-tools/lib/apiv2.js:415:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[error] 
+[error] Error: Failed to create Web app for project decor-f09fb. See firebase-debug.log for more info.

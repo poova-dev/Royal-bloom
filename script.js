@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ----------------------------------------------------------------------
-       6. LUXURY FORM INTERACTION & LEADS SUBMISSION
+       6. LUXURY FORM INTERACTION & LEADS SUBMISSION (FIRESTORE SYNC)
        ---------------------------------------------------------------------- */
     const leadForm = document.getElementById('wedding-lead-form');
     
@@ -186,6 +186,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const phone = document.getElementById('client-phone').value;
             const date = document.getElementById('event-date').value;
             const theme = document.getElementById('theme-pref').value;
+            const details = document.getElementById('event-details') ? document.getElementById('event-details').value : '';
+
+            // Firestore Sync (Save lead to Cloud database)
+            if (window.firebaseDb && window.firebaseFirestore) {
+                try {
+                    const { collection, addDoc, serverTimestamp } = window.firebaseFirestore;
+                    addDoc(collection(window.firebaseDb, 'leads'), {
+                        clientName: name,
+                        phone: phone,
+                        eventDate: date,
+                        preferredTheme: theme,
+                        visionDetails: details,
+                        createdTime: serverTimestamp()
+                    }).then(() => {
+                        console.log("🔥 Lead successfully recorded in Firestore!");
+                    }).catch(err => console.warn("Firestore lead save notice:", err));
+                } catch (e) {
+                    console.warn("Firestore async save notice:", e);
+                }
+            }
             
             // Format WhatsApp prefilled message
             const waText = `Hi Royal Blooms! I just submitted an inquiry on your website.%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Phone:* ${encodeURIComponent(phone)}%0A*Event Date:* ${encodeURIComponent(date)}%0A*Preferred Theme:* ${encodeURIComponent(theme)}`;
@@ -208,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
             notification.innerHTML = `
                 <span style="font-size: 3rem; color: #D4AF37; display: block; margin-bottom: 1rem;">❦</span>
                 <h3 style="font-size: 1.75rem; margin-bottom: 1rem; color: #FAF7F2;">Thank You, ${name}</h3>
-                <p style="color: #D1C9BE; margin-bottom: 2rem; font-size: 0.95rem;">Your dream wedding decor consultation is being registered. Let's immediately connect on WhatsApp to refine details!</p>
+                <p style="color: #D1C9BE; margin-bottom: 2rem; font-size: 0.95rem;">Your dream wedding decor consultation is registered in our database. Let's immediately connect on WhatsApp to refine details!</p>
                 <a href="${waUrl}" target="_blank" class="btn btn-secondary" style="width: 100%; display: block; text-align: center;">Open WhatsApp Chat</a>
                 <button id="close-notif-btn" style="background: none; border: none; color: #FAF7F2; margin-top: 1.25rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; opacity: 0.7;">Close Window</button>
             `;
@@ -791,6 +811,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (pickedIds.length > 0) hashQuery += `&items=${pickedIds.join(',')}`;
 
             const finalUrl = baseUrl + hashQuery;
+
+            // Firestore Sync (Save proposal security record to Cloud database)
+            if (window.firebaseDb && window.firebaseFirestore) {
+                try {
+                    const { doc, setDoc, serverTimestamp } = window.firebaseFirestore;
+                    setDoc(doc(window.firebaseDb, 'proposals', propId), {
+                        proposalId: propId,
+                        clientName: clientName,
+                        targetBudget: budgetTier,
+                        expTime: expTime,
+                        maxViews: maxViews,
+                        viewsUsed: 0,
+                        pickedItemIds: pickedIds,
+                        shareableUrl: finalUrl,
+                        createdTime: serverTimestamp()
+                    }).then(() => {
+                        console.log("🔥 Proposal record saved to Firestore proposals database!");
+                    }).catch(err => console.warn("Firestore proposal save notice:", err));
+                } catch (e) {
+                    console.warn("Firestore async proposal save notice:", e);
+                }
+            }
 
             if (generatedUrlInput) generatedUrlInput.value = finalUrl;
             if (adminLinkOutput) adminLinkOutput.classList.remove('hidden');
