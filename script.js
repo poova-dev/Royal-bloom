@@ -394,11 +394,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('royal_blooms_catalog', JSON.stringify(catalogItems));
     };
 
-    // State Variables
+    // State Variables & Filter States
     let selectedBudget = 'all';
     let selectedCategory = 'all';
     let searchQuery = '';
     let proposalSelectedIds = null; // List of IDs if limited proposal
+    let isProposalModeActive = false;
+    let activeProposalClientName = 'Valued Client';
+    let activeProposalId = '';
 
     // Elements
     const catalogGrid = document.getElementById('catalogue-grid');
@@ -449,6 +452,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (filtered.length === 0) {
             emptyState.classList.remove('hidden');
+
+            if (isProposalModeActive) {
+                // Proposal Client Mode Empty State (Redirects to Consultation / WhatsApp, preserving scope)
+                const waMsg = `Hi Royal Blooms! I am viewing my proposal (${activeProposalId}) for ${activeProposalClientName} and would like to request additional custom decor options.`;
+                const waUrl = `https://wa.me/918939601257?text=${encodeURIComponent(waMsg)}`;
+
+                emptyState.innerHTML = `
+                    <div style="padding: 1rem; text-align: center;">
+                        <span class="empty-icon">
+                            <svg class="svg-icon-lg" viewBox="0 0 24 24" style="color: var(--accent-gold);"><path fill="currentColor" d="M12 2C9.24 2 7 4.24 7 7c0 1.34.53 2.56 1.39 3.46C7.54 11.23 7 12.55 7 14c0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.45-.54-2.77-1.39-3.54C16.47 9.56 17 8.34 17 7c0-2.76-2.24-5-5-5zm0 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+                        </span>
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-dark);">No Matching Designs in Your Proposal</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 550px; margin: 0 auto 1.5rem;">No catalog items in your curated proposal match this filter. Would you like to request additional custom designs or a revised quote from lead designer Kalpana Amar?</p>
+                        <div class="empty-proposal-actions">
+                            <button class="btn btn-primary" id="proposal-inquire-form-trigger">
+                                <svg class="svg-icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                                Inquire / Request Custom Quote
+                            </button>
+                            <a href="${waUrl}" target="_blank" class="btn btn-secondary">
+                                <svg class="svg-icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.731-1.456L0 24z"/></svg>
+                                Ask Decorator on WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+                // Handle Inquiry Form Trigger
+                const leadTriggerBtn = document.getElementById('proposal-inquire-form-trigger');
+                if (leadTriggerBtn) {
+                    leadTriggerBtn.addEventListener('click', () => {
+                        const contactElem = document.getElementById('contact');
+                        const nameInput = document.getElementById('client-name');
+                        const detailsInput = document.getElementById('event-details');
+
+                        if (nameInput && !nameInput.value) {
+                            nameInput.value = activeProposalClientName !== 'Valued Client' ? activeProposalClientName : '';
+                        }
+                        if (detailsInput && !detailsInput.value.includes('Proposal Reference')) {
+                            detailsInput.value = `[Proposal Reference: ${activeProposalId}] Requesting custom decor options / budget quote.`;
+                        }
+
+                        if (contactElem) {
+                            contactElem.scrollIntoView({ behavior: 'smooth' });
+                            if (detailsInput) setTimeout(() => detailsInput.focus(), 800);
+                        }
+                    });
+                }
+            } else {
+                // Public Visitor Mode Empty State
+                emptyState.innerHTML = `
+                    <span class="empty-icon">
+                        <svg class="svg-icon-lg" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </span>
+                    <h3>No Decor Designs Found</h3>
+                    <p>No catalog items match your selected budget tier or search criteria. Try selecting "All Budgets" or contact our design team for custom bespoke creations.</p>
+                    <button class="btn btn-secondary" id="reset-cat-filters-btn">Reset All Filters</button>
+                `;
+
+                const publicResetBtn = document.getElementById('reset-cat-filters-btn');
+                if (publicResetBtn) {
+                    publicResetBtn.addEventListener('click', () => {
+                        searchQuery = '';
+                        selectedCategory = 'all';
+                        selectedBudget = 'all';
+                        if (searchInput) searchInput.value = '';
+                        budgetButtons.forEach(b => b.classList.remove('active'));
+                        if (budgetButtons[0]) budgetButtons[0].classList.add('active');
+                        categoryTabs.forEach(t => t.classList.remove('active'));
+                        if (categoryTabs[0]) categoryTabs[0].classList.add('active');
+                        renderCatalogue();
+                    });
+                }
+            }
         } else {
             emptyState.classList.add('hidden');
 
@@ -521,10 +597,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     budgetButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // If in active restricted proposal mode, prevent budget switching out of proposal tier
-            if (proposalSelectedIds && proposalSelectedIds.length > 0) {
-                console.log("Proposal Mode Active: Scoped to proposal items");
-            }
             budgetButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             selectedBudget = btn.getAttribute('data-budget');
@@ -540,27 +612,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCatalogue();
         });
     });
-
-    // LOGICAL RESET FILTERS (Preserves Proposal Security Scope if viewing a client link)
-    if (resetFiltersBtn) {
-        resetFiltersBtn.addEventListener('click', () => {
-            searchQuery = '';
-            selectedCategory = 'all';
-            if (searchInput) searchInput.value = '';
-            
-            categoryTabs.forEach(t => t.classList.remove('active'));
-            if (categoryTabs[0]) categoryTabs[0].classList.add('active');
-
-            // If client is viewing a restricted proposal, keep their proposal scope!
-            if (!proposalSelectedIds) {
-                selectedBudget = 'all';
-                budgetButtons.forEach(b => b.classList.remove('active'));
-                if (budgetButtons[0]) budgetButtons[0].classList.add('active');
-            }
-
-            renderCatalogue();
-        });
-    }
 
     // Initialize Catalogue Render
     renderCatalogue();
@@ -595,6 +646,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const itemsParam = params.get('items');
 
         if (!propId || !expTime) return;
+
+        // Set proposal active mode
+        isProposalModeActive = true;
+        activeProposalClientName = clientName;
+        activeProposalId = propId;
 
         // Track proposal views in LocalStorage
         const storageKey = `decor_proposal_views_${propId}`;

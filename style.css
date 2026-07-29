@@ -1990,8 +1990,16 @@ textarea.form-input {
     padding: 4rem 2rem;
     background: #FFF;
     border-radius: 16px;
-    border: 1px dashed var(--accent-gold);
+    border: 1px dashed rgba(212, 175, 55, 0.4);
     margin-top: 2rem;
+}
+.empty-proposal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
 }
 .empty-icon {
     font-size: 3rem;
