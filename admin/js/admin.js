@@ -603,8 +603,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [{
                     label: 'Client Proposal Links Shared',
                     data: data,
-                    borderColor: '#D4AF37',
-                    backgroundColor: 'rgba(212, 175, 55, 0.15)',
+                    borderColor: '#009CFF',
+                    backgroundColor: 'rgba(0, 156, 255, 0.12)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.4
@@ -614,11 +614,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { labels: { color: '#FAF7F2' } }
+                    legend: { labels: { color: '#191C24', font: { weight: 'bold' } } }
                 },
                 scales: {
-                    x: { ticks: { color: '#B3AAA0' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y: { ticks: { color: '#B3AAA0' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    x: { ticks: { color: '#6C757D' }, grid: { color: '#E9ECEF' } },
+                    y: { ticks: { color: '#6C757D' }, grid: { color: '#E9ECEF' } }
                 }
             }
         });
@@ -645,16 +645,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 labels: ['₹50k Haldi/Sangeet', '₹1L - ₹2L Classic', '₹2L - ₹5L Royal', '₹5L+ Grand Luxury'],
                 datasets: [{
                     data: [b50k || 2, b1L || 5, b2L || 8, b5L || 3],
-                    backgroundColor: ['#E6C200', '#D4AF37', '#AA820A', '#C5A059'],
+                    backgroundColor: ['#009CFF', '#D4AF37', '#0084DA', '#AA820A'],
                     borderWidth: 2,
-                    borderColor: '#121212'
+                    borderColor: '#FFFFFF'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom', labels: { color: '#FAF7F2', font: { size: 11 } } }
+                    legend: { position: 'bottom', labels: { color: '#191C24', font: { size: 11 } } }
                 }
             }
         });
@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAnalyticsDashboard();
 
     // ----------------------------------------------------------------------
-    // 7. REAL-TIME FIRESTORE CLIENT LEADS LISTENER
+    // 7. REAL-TIME FIRESTORE CLIENT LEADS & ENQUIRIES LISTENER (WITH STATUS BADGES)
     // ----------------------------------------------------------------------
     const leadsTbody = document.getElementById('admin-leads-tbody');
     const kpiLeadsElem = document.getElementById('kpi-total-leads');
@@ -671,7 +671,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const listenToFirestoreLeads = () => {
         if (window.firebaseDb && window.firebaseFirestore) {
             try {
-                const { collection, onSnapshot } = window.firebaseFirestore;
+                const { collection, onSnapshot, doc, updateDoc, deleteDoc } = window.firebaseFirestore;
                 onSnapshot(collection(window.firebaseDb, 'leads'), (snapshot) => {
                     if (!leadsTbody) return;
                     leadsTbody.innerHTML = '';
@@ -679,24 +679,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     snapshot.forEach(docSnap => {
                         count++;
+                        const leadId = docSnap.id;
                         const lead = docSnap.data();
+                        const status = lead.status || 'Pending';
+
+                        let badgeBg = 'bg-warning text-dark';
+                        if (status === 'Booked' || status === 'Completed') badgeBg = 'bg-success text-white';
+                        if (status === 'Cancelled') badgeBg = 'bg-danger text-white';
+
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td><strong class="text-white">${lead.name || 'Anonymous Client'}</strong></td>
-                            <td><a href="tel:${lead.phone}" class="text-gold text-decoration-none">${lead.phone || 'N/A'}</a></td>
-                            <td><span class="badge bg-secondary border border-gold text-light">${lead.eventDate || 'TBD'}</span></td>
-                            <td><span class="badge bg-gold text-dark">${lead.theme || 'Custom'}</span></td>
+                            <td><strong class="text-dark fw-bold">${lead.name || 'Anonymous Client'}</strong></td>
+                            <td><a href="tel:${lead.phone}" class="text-primary fw-semibold text-decoration-none">${lead.phone || 'N/A'}</a></td>
+                            <td><span class="badge bg-light text-dark border">${lead.eventDate || 'TBD'}</span></td>
+                            <td><span class="badge bg-primary text-white">${lead.theme || 'Custom'}</span></td>
                             <td><small class="text-muted">${lead.details || 'No additional details'}</small></td>
                             <td>
-                                <a href="https://wa.me/${(lead.phone || '').replace(/\D/g, '')}?text=Hi%20${encodeURIComponent(lead.name || 'there')},%20this%20is%20Kalpana%20Amar%20from%20Royal%20Blooms%20Decor!%20Thank%20you%20for%20your%20inquiry." target="_blank" class="btn btn-sm btn-success">
-                                    <i class="fab fa-whatsapp me-1"></i> Chat
-                                </a>
+                                <select class="form-select form-select-sm lead-status-select ${badgeBg}" data-id="${leadId}" style="width: 120px;">
+                                    <option value="Pending" ${status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Contacted" ${status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                                    <option value="Booked" ${status === 'Booked' ? 'selected' : ''}>Booked</option>
+                                    <option value="Completed" ${status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                    <option value="Cancelled" ${status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a href="https://wa.me/${(lead.phone || '').replace(/\D/g, '')}?text=Hi%20${encodeURIComponent(lead.name || 'there')},%20this%20is%20Kalpana%20Amar%20from%20Royal%20Blooms%20Decor!%20Thank%20you%20for%20your%20inquiry." target="_blank" class="btn btn-sm btn-success" title="Chat on WhatsApp">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-danger delete-lead-btn" data-id="${leadId}" title="Delete Enquiry">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </td>
                         `;
                         leadsTbody.appendChild(tr);
                     });
 
                     if (kpiLeadsElem) kpiLeadsElem.textContent = count;
+
+                    // Attach Status Change Handlers
+                    document.querySelectorAll('.lead-status-select').forEach(sel => {
+                        sel.addEventListener('change', (e) => {
+                            const id = e.target.getAttribute('data-id');
+                            const newStatus = e.target.value;
+                            updateDoc(doc(window.firebaseDb, 'leads', id), { status: newStatus })
+                                .then(() => console.log("🔥 Lead status updated:", id, newStatus))
+                                .catch(err => console.warn(err));
+                        });
+                    });
+
+                    // Attach Delete Lead Handlers
+                    document.querySelectorAll('.delete-lead-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const id = btn.getAttribute('data-id');
+                            if (confirm("Delete this client enquiry?")) {
+                                deleteDoc(doc(window.firebaseDb, 'leads', id))
+                                    .then(() => console.log("🔥 Lead deleted:", id))
+                                    .catch(err => console.warn(err));
+                            }
+                        });
+                    });
                 });
             } catch (e) {
                 console.warn("Firestore leads listener notice:", e);
@@ -704,5 +748,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    setTimeout(listenToFirestoreLeads, 2000);
+    setTimeout(listenToFirestoreLeads, 1500);
 });

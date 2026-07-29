@@ -1,27 +1,29 @@
 /* ==========================================================================
-   ROYAL BLOOMS DECOR - DASHMIN PROFESSIONAL DARK ADMIN THEME
+   ROYAL BLOOMS DECOR - DASHMIN PROFESSIONAL LIGHT & CYAN ADMIN THEME
    ========================================================================== */
 
 :root {
-    --primary: #D4AF37;
-    --primary-hover: #F3E5AB;
-    --dark: #191C24;
-    --black: #000000;
-    --light-slate: #2A2E39;
-    --text-white: #FFFFFF;
-    --text-muted: #8F95B2;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-gold: rgba(212, 175, 55, 0.3);
-    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --primary: #009CFF;
+    --primary-hover: #0084DA;
+    --accent-gold: #D4AF37;
+    --bg-body: #F3F6F9;
+    --bg-sidebar: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --text-dark: #191C24;
+    --text-muted: #6C757D;
+    --border-light: #E9ECEF;
+    --border-primary: rgba(0, 156, 255, 0.25);
+    --shadow-soft: 0 0 25px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 10px 30px rgba(0, 156, 255, 0.12);
 }
 
 body {
-    background-color: var(--black) !important;
-    color: var(--text-white);
+    background-color: var(--bg-body) !important;
+    color: var(--text-dark) !important;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Sidebar Custom Styling (Dashmin Signature Dark Slate) */
+/* Sidebar Custom Styling (Dashmin Clean White Sidebar) */
 .sidebar {
     position: fixed;
     top: 0;
@@ -30,8 +32,8 @@ body {
     width: 260px;
     height: 100vh;
     overflow-y: auto;
-    background: var(--dark) !important;
-    border-right: 1px solid var(--border-subtle);
+    background: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-light);
     transition: 0.4s;
     z-index: 999;
 }
@@ -39,7 +41,7 @@ body {
 .content {
     margin-left: 260px;
     min-height: 100vh;
-    background: var(--black) !important;
+    background: var(--bg-body) !important;
     transition: 0.4s;
 }
 
@@ -71,15 +73,15 @@ body {
     font-family: 'Playfair Display', Georgia, serif;
     color: var(--primary) !important;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
-/* Sidebar Nav Pills (Dashmin Curved Pill Active State) */
+/* Sidebar Nav Links (Dashmin Curved Active Pill) */
 .sidebar .navbar .navbar-nav .nav-link {
     padding: 10px 20px;
-    color: var(--text-muted);
+    color: var(--text-dark) !important;
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 0.925rem;
     border-left: 4px solid transparent;
     border-radius: 0 30px 30px 0;
     outline: none;
@@ -90,36 +92,37 @@ body {
 }
 
 .sidebar .navbar .navbar-nav .nav-link i {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--black);
+    background: var(--bg-body);
     border-radius: 50%;
     color: var(--primary);
     margin-right: 12px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
 }
 
 .sidebar .navbar .navbar-nav .nav-link:hover,
 .sidebar .navbar .navbar-nav .nav-link.active {
     color: var(--primary) !important;
-    background: var(--black) !important;
+    background: var(--bg-body) !important;
     border-left-color: var(--primary) !important;
+    font-weight: 600;
 }
 
 .sidebar .navbar .navbar-nav .nav-link:hover i,
 .sidebar .navbar .navbar-nav .nav-link.active i {
-    background: var(--dark);
-    color: var(--text-white);
+    background: var(--primary);
+    color: #FFFFFF;
 }
 
 /* Top Navbar Styling */
 .navbar-custom {
-    background: var(--dark) !important;
-    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-sidebar) !important;
+    border-bottom: 1px solid var(--border-light);
     padding: 0.75rem 1.5rem;
 }
 
@@ -129,7 +132,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--black);
+    background: var(--bg-body);
     border-radius: 50%;
     color: var(--primary);
     cursor: pointer;
@@ -138,92 +141,93 @@ body {
 
 .sidebar-toggler:hover {
     background: var(--primary);
-    color: var(--black);
+    color: #FFFFFF;
 }
 
-/* Cards Styling (Dashmin Charcoal Slate) */
-.bg-secondary {
-    background-color: var(--dark) !important;
-    border: 1px solid var(--border-subtle) !important;
+/* Cards & Panels (Clean White Dashmin Cards) */
+.bg-secondary, .card-dash {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-light) !important;
     border-radius: 12px !important;
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-soft);
 }
 
 .kpi-card {
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .kpi-card:hover {
     transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
     border-color: var(--primary) !important;
 }
 
 .kpi-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-    background: var(--black);
-    border: 1px solid var(--border-gold);
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: var(--bg-body);
+    border: 1px solid var(--border-primary);
     color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.35rem;
+    font-size: 1.4rem;
 }
 
 /* Buttons */
-.btn-gold {
-    background: var(--primary);
-    color: var(--black);
+.btn-primary, .btn-gold {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #FFFFFF !important;
     font-weight: 600;
-    border: none;
     padding: 0.55rem 1.25rem;
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
-.btn-gold:hover {
-    background: var(--primary-hover);
-    color: var(--black);
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+.btn-primary:hover, .btn-gold:hover {
+    background: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+    box-shadow: 0 4px 15px rgba(0, 156, 255, 0.3);
 }
 
-.btn-outline-gold {
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    background: transparent;
+.btn-outline-primary, .btn-outline-gold {
+    border: 1px solid var(--primary) !important;
+    color: var(--primary) !important;
+    background: transparent !important;
     padding: 0.45rem 1rem;
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
-.btn-outline-gold:hover {
-    background: var(--primary);
-    color: var(--black);
+.btn-outline-primary:hover, .btn-outline-gold:hover {
+    background: var(--primary) !important;
+    color: #FFFFFF !important;
 }
 
 /* Form Controls */
 .form-control, .form-select {
-    background-color: var(--black) !important;
-    border: 1px solid var(--border-subtle) !important;
-    color: var(--text-white) !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid #CED4DA !important;
+    color: var(--text-dark) !important;
     border-radius: 8px !important;
     padding: 0.6rem 1rem;
 }
 
 .form-control:focus, .form-select:focus {
     border-color: var(--primary) !important;
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(0, 156, 255, 0.15) !important;
 }
 
-/* Table Styling */
+/* Tables */
 .table-custom {
-    color: var(--text-white);
+    color: var(--text-dark);
 }
 
 .table-custom th {
-    background: var(--black);
-    color: var(--primary);
-    border-bottom: 2px solid var(--border-gold);
+    background: var(--bg-body);
+    color: var(--text-dark);
+    border-bottom: 2px solid var(--border-light);
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.8rem;
@@ -231,22 +235,22 @@ body {
 }
 
 .table-custom td {
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-light);
     vertical-align: middle;
 }
 
 .cat-thumb-sm {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid var(--border-gold);
+    border: 1px solid var(--border-light);
 }
 
 /* Date Range Filter Bar */
 .date-filter-bar {
-    background: var(--dark);
-    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
     border-radius: 12px;
     padding: 0.85rem 1.25rem;
     margin-bottom: 1.5rem;
@@ -255,11 +259,12 @@ body {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 1rem;
+    box-shadow: var(--shadow-soft);
 }
 
 .preset-btn {
-    border: 1px solid var(--border-subtle);
-    background: var(--black);
+    border: 1px solid var(--border-light);
+    background: var(--bg-body);
     color: var(--text-muted);
     padding: 0.35rem 0.85rem;
     border-radius: 6px;
@@ -269,20 +274,34 @@ body {
 
 .preset-btn.active, .preset-btn:hover {
     background: var(--primary);
-    color: var(--black);
+    color: #FFFFFF;
     font-weight: 600;
     border-color: var(--primary);
 }
 
-/* Security Auth Modal Overlay */
+/* Diagnostic Error Banner */
+.diagnostic-error-banner {
+    background: #FFF5F5;
+    border: 1px solid #FEB2B2;
+    color: #C53030;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Auth Modal Overlay */
 .auth-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(12px);
+    background: rgba(25, 28, 36, 0.85);
+    backdrop-filter: blur(8px);
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -290,19 +309,19 @@ body {
 }
 
 .auth-modal-card {
-    background: var(--dark);
-    border: 1px solid var(--border-gold);
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
     border-radius: 16px;
     padding: 2.5rem 2rem;
     max-width: 420px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
 }
 
 .modal-content-custom {
-    background: var(--dark) !important;
-    border: 1px solid var(--border-gold) !important;
-    color: var(--text-white);
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-light) !important;
+    color: var(--text-dark);
     border-radius: 16px;
 }

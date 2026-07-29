@@ -37,14 +37,14 @@
             <div class="kpi-icon mx-auto mb-3">
                 <i class="fas fa-lock"></i>
             </div>
-            <h3 style="font-family: 'Playfair Display', serif; color: var(--accent-gold); margin-bottom: 0.5rem;">Decor Suite Control</h3>
-            <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">Enter Admin Passcode / PIN to access analytics, proposal generator & catalog manager.</p>
+            <h3 style="font-family: 'Playfair Display', serif; color: var(--text-dark); margin-bottom: 0.5rem;">Decor Suite Control</h3>
+            <p class="text-muted small mb-4">Enter Admin Passcode / PIN to access analytics, proposal generator & catalog manager.</p>
             <form id="admin-auth-form">
                 <div class="mb-3">
                     <input type="password" id="admin-pin-input" class="form-control text-center" placeholder="Enter PIN (Default: 1234)" required autocomplete="off" style="font-size: 1.25rem; letter-spacing: 4px;">
                     <div id="admin-pin-error" class="text-danger mt-2 small d-none">Invalid Passcode PIN. Try again.</div>
                 </div>
-                <button type="submit" class="btn btn-gold w-100 py-2">
+                <button type="submit" class="btn btn-primary w-100 py-2">
                     <i class="fas fa-key me-2"></i> Authenticate & Open Suite
                 </button>
             </form>
@@ -55,10 +55,10 @@
     <div class="container-fluid position-relative d-flex p-0">
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
-            <nav class="navbar bg-secondary navbar-dark">
+            <nav class="navbar bg-white navbar-light">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="m-0"><i class="fas fa-crown me-2"></i>ROYAL BLOOMS</h3>
-                    <small style="color: var(--text-muted); font-size: 0.7rem; letter-spacing: 1px;">BESPOKE DECOR SUITE</small>
+                    <h3 class="m-0 text-primary"><i class="fas fa-crown me-2"></i>ROYAL BLOOMS</h3>
+                    <small class="text-muted" style="font-size: 0.7rem; letter-spacing: 1px;">BESPOKE DECOR SUITE</small>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
@@ -67,15 +67,15 @@
                         </div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0 text-white">Kalpana Amar</h6>
-                        <span style="color: var(--accent-gold); font-size: 0.75rem;">Lead Designer / Admin</span>
+                        <h6 class="mb-0 text-dark">Kalpana Amar</h6>
+                        <span class="text-primary small fw-semibold">Lead Designer / Admin</span>
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="#analytics-section" class="nav-link active" data-tab="analytics-section"><i class="fas fa-chart-line"></i> Analytics & Metrics</a>
-                    <a href="#proposal-generator-section" class="nav-link" data-tab="proposal-generator-section"><i class="fas fa-link"></i> Proposal Link Generator</a>
+                    <a href="#proposal-generator-section" class="nav-link" data-tab="proposal-generator-section"><i class="fas fa-link"></i> Proposal Generator</a>
                     <a href="#catalog-crud-section" class="nav-link" data-tab="catalog-crud-section"><i class="fas fa-boxes"></i> Catalog CRUD Manager</a>
-                    <a href="#leads-section" class="nav-link" data-tab="leads-section"><i class="fas fa-users"></i> Client Lead Inquiries</a>
+                    <a href="#leads-section" class="nav-link" data-tab="leads-section"><i class="fas fa-users"></i> Client Leads & Enquiries</a>
                 </div>
             </nav>
         </div>
@@ -84,14 +84,17 @@
         <!-- Content Start -->
         <div class="content flex-grow-1">
             <!-- Navbar Start -->
-            <nav class="navbar navbar-expand navbar-dark navbar-custom sticky-top">
-                <a href="#" class="sidebar-toggler flex-shrink-0 text-gold text-decoration-none me-3">
-                    <i class="fa fa-bars fs-5" style="color: var(--accent-gold);"></i>
+            <nav class="navbar navbar-expand navbar-light navbar-custom sticky-top">
+                <a href="#" class="sidebar-toggler flex-shrink-0 text-decoration-none me-3">
+                    <i class="fa fa-bars fs-5"></i>
                 </a>
-                <span class="d-none d-md-inline-block fw-bold text-white">Decor Suite Admin Dashboard</span>
+                
+                <div class="d-none d-md-flex ms-2">
+                    <input class="form-control form-control-sm border-0 bg-light" type="search" placeholder="Search analytics, proposals, leads..." style="width: 250px;">
+                </div>
 
                 <div class="navbar-nav align-items-center ms-auto gap-3">
-                    <a href="../index.html" target="_blank" class="btn btn-outline-gold btn-sm">
+                    <a href="../index.html" target="_blank" class="btn btn-outline-primary btn-sm">
                         <i class="fas fa-external-link-alt me-1"></i> Public Website
                     </a>
                     <button class="btn btn-sm btn-outline-danger" id="admin-lock-session-btn" title="Lock Admin Session">
@@ -102,21 +105,31 @@
             <!-- Navbar End -->
 
             <div class="container-fluid pt-4 px-4">
+
+                <!-- DIAGNOSTIC ERROR BANNER (Auto-hidden if Config Valid) -->
+                <div id="diagnostic-error-banner" class="diagnostic-error-banner d-none">
+                    <i class="fas fa-exclamation-triangle fs-4"></i>
+                    <div>
+                        <strong>Configuration Diagnostic Notice:</strong>
+                        <span id="diagnostic-error-text">Checking credentials...</span>
+                    </div>
+                </div>
+
                 <!-- ----------------------------------------------------------------------
                      SECTION 1: DASHBOARD & ANALYTICS
                      ---------------------------------------------------------------------- -->
                 <div id="analytics-section" class="dashboard-tab-content">
                     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                         <div>
-                            <h2 style="font-family: 'Playfair Display', serif; color: var(--text-light); margin: 0;">Performance Analytics</h2>
-                            <small style="color: var(--text-muted);">Real-time proposal tracking & lead conversion metrics</small>
+                            <h2 class="text-dark fw-bold" style="font-family: 'Playfair Display', serif; margin: 0;">Performance Analytics</h2>
+                            <small class="text-muted">Real-time proposal tracking & lead conversion metrics</small>
                         </div>
                     </div>
 
                     <!-- Date Range Filter Toolbar -->
                     <div class="date-filter-bar">
                         <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <span class="text-gold fw-bold small"><i class="fas fa-calendar-alt me-1"></i> Date Filter:</span>
+                            <span class="text-primary fw-bold small"><i class="fas fa-calendar-alt me-1"></i> Date Filter:</span>
                             <button class="preset-btn active" data-preset="30">1 Month (Default)</button>
                             <button class="preset-btn" data-preset="90">3 Months</button>
                             <button class="preset-btn" data-preset="180">6 Months</button>
@@ -127,7 +140,7 @@
                             <input type="date" id="analytics-start-date" class="form-control form-control-sm" style="width: 140px;">
                             <span class="text-muted">to</span>
                             <input type="date" id="analytics-end-date" class="form-control form-control-sm" style="width: 140px;">
-                            <button class="btn btn-gold btn-sm" id="apply-custom-date-btn">Apply</button>
+                            <button class="btn btn-primary btn-sm" id="apply-custom-date-btn">Apply</button>
                         </div>
                     </div>
 
@@ -137,14 +150,14 @@
                             <div class="bg-secondary rounded p-4 kpi-card">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
-                                        <p class="mb-2 text-muted small uppercase">Proposals Shared</p>
-                                        <h3 class="mb-0 text-white" id="kpi-total-proposals">0</h3>
+                                        <p class="mb-1 text-muted small text-uppercase font-weight-bold">Proposals Shared</p>
+                                        <h3 class="mb-0 text-dark fw-bold" id="kpi-total-proposals">0</h3>
                                     </div>
                                     <div class="kpi-icon">
                                         <i class="fas fa-share-alt"></i>
                                     </div>
                                 </div>
-                                <small class="text-gold mt-2 d-block" id="kpi-date-label">Last 30 Days</small>
+                                <small class="text-primary mt-2 d-block fw-semibold" id="kpi-date-label">Last 30 Days</small>
                             </div>
                         </div>
 
@@ -152,14 +165,14 @@
                             <div class="bg-secondary rounded p-4 kpi-card">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
-                                        <p class="mb-2 text-muted small uppercase">Active Live Links</p>
-                                        <h3 class="mb-0 text-white" id="kpi-active-proposals">0</h3>
+                                        <p class="mb-1 text-muted small text-uppercase font-weight-bold">Active Live Links</p>
+                                        <h3 class="mb-0 text-dark fw-bold" id="kpi-active-proposals">0</h3>
                                     </div>
                                     <div class="kpi-icon">
                                         <i class="fas fa-clock"></i>
                                     </div>
                                 </div>
-                                <small class="text-success mt-2 d-block"><i class="fas fa-check-circle me-1"></i> In 48h/3-View Window</small>
+                                <small class="text-success mt-2 d-block fw-semibold"><i class="fas fa-check-circle me-1"></i> In 48h/3-View Window</small>
                             </div>
                         </div>
 
@@ -167,10 +180,10 @@
                             <div class="bg-secondary rounded p-4 kpi-card">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
-                                        <p class="mb-2 text-muted small uppercase">Expired Proposals</p>
-                                        <h3 class="mb-0 text-white" id="kpi-expired-proposals">0</h3>
+                                        <p class="mb-1 text-muted small text-uppercase font-weight-bold">Expired Proposals</p>
+                                        <h3 class="mb-0 text-dark fw-bold" id="kpi-expired-proposals">0</h3>
                                     </div>
-                                    <div class="kpi-icon" style="border-color: var(--accent-rose); color: var(--accent-rose);">
+                                    <div class="kpi-icon" style="border-color: #FEB2B2; color: #E53E3E;">
                                         <i class="fas fa-lock"></i>
                                     </div>
                                 </div>
@@ -182,14 +195,14 @@
                             <div class="bg-secondary rounded p-4 kpi-card">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
-                                        <p class="mb-2 text-muted small uppercase">Client Leads Received</p>
-                                        <h3 class="mb-0 text-white" id="kpi-total-leads">0</h3>
+                                        <p class="mb-1 text-muted small text-uppercase font-weight-bold">Client Leads Received</p>
+                                        <h3 class="mb-0 text-dark fw-bold" id="kpi-total-leads">0</h3>
                                     </div>
                                     <div class="kpi-icon">
                                         <i class="fas fa-envelope-open-text"></i>
                                     </div>
                                 </div>
-                                <small class="text-gold mt-2 d-block"><i class="fas fa-fire me-1"></i> Firestore Cloud Sync</small>
+                                <small class="text-primary mt-2 d-block fw-semibold"><i class="fas fa-fire me-1"></i> Firestore Cloud Sync</small>
                             </div>
                         </div>
                     </div>
@@ -199,15 +212,15 @@
                         <div class="col-sm-12 col-xl-8">
                             <div class="bg-secondary rounded p-4">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="text-white mb-0" style="font-family: 'Playfair Display', serif;">Client Proposal Links Shared (Timeline)</h5>
-                                    <span class="badge bg-gold text-dark" id="chart-period-badge">1 Month View</span>
+                                    <h5 class="text-dark mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">Client Proposal Links Shared (Timeline)</h5>
+                                    <span class="badge bg-primary text-white" id="chart-period-badge">1 Month View</span>
                                 </div>
                                 <canvas id="proposals-chart" style="height: 300px;"></canvas>
                             </div>
                         </div>
                         <div class="col-sm-12 col-xl-4">
                             <div class="bg-secondary rounded p-4">
-                                <h5 class="text-white mb-3" style="font-family: 'Playfair Display', serif;">Budget Tier Breakdown</h5>
+                                <h5 class="text-dark mb-3 fw-bold" style="font-family: 'Playfair Display', serif;">Budget Tier Breakdown</h5>
                                 <canvas id="budget-pie-chart" style="height: 300px;"></canvas>
                             </div>
                         </div>
@@ -221,7 +234,7 @@
                     <div class="bg-secondary rounded p-4 mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
-                                <h3 style="font-family: 'Playfair Display', serif; color: var(--accent-gold); margin: 0;">Expirable Proposal Link Generator</h3>
+                                <h3 class="text-primary fw-bold" style="font-family: 'Playfair Display', serif; margin: 0;">Expirable Proposal Link Generator</h3>
                                 <small class="text-muted">Create 2-Day / 3-View secured proposal links direct for clients</small>
                             </div>
                         </div>
@@ -229,11 +242,11 @@
                         <form id="admin-gen-proposal-form">
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
-                                    <label class="form-label text-gold">Client / Couple Name</label>
+                                    <label class="form-label text-dark fw-semibold">Client / Couple Name</label>
                                     <input type="text" id="admin-client-name" class="form-control" placeholder="e.g. Arvind & Sneha" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label text-gold">Target Budget Filter</label>
+                                    <label class="form-label text-dark fw-semibold">Target Budget Filter</label>
                                     <select id="admin-budget-tier" class="form-select">
                                         <option value="all">All Budget Tiers</option>
                                         <option value="50000">Starting from ₹50,000</option>
@@ -246,7 +259,7 @@
 
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
-                                    <label class="form-label text-gold">Link Expiry Duration</label>
+                                    <label class="form-label text-dark fw-semibold">Link Expiry Duration</label>
                                     <select id="admin-expiry-hours" class="form-select">
                                         <option value="48" selected>2 Days (48 Hours) - Recommended</option>
                                         <option value="24">1 Day (24 Hours) - Urgent</option>
@@ -255,7 +268,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label text-gold">Maximum View Limit</label>
+                                    <label class="form-label text-dark fw-semibold">Maximum View Limit</label>
                                     <select id="admin-max-views" class="form-select">
                                         <option value="3" selected>3 Views Maximum (Recommended)</option>
                                         <option value="2">2 Views</option>
@@ -266,23 +279,23 @@
                             </div>
 
                             <div class="mb-4">
-                                <label class="form-label text-gold">Select Specific Designs to Feature (Optional):</label>
-                                <div class="bg-dark p-3 rounded" id="admin-item-picker-container" style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border-gold);">
+                                <label class="form-label text-dark fw-semibold">Select Specific Designs to Feature (Optional):</label>
+                                <div class="bg-light p-3 rounded border" id="admin-item-picker-container" style="max-height: 200px; overflow-y: auto;">
                                     <!-- Populated via JS -->
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-gold w-100 py-2">
+                            <button type="submit" class="btn btn-primary w-100 py-2">
                                 <i class="fas fa-link me-2"></i> Generate Sharable Expirable Proposal Link
                             </button>
                         </form>
 
                         <!-- Generated Link Output Box -->
-                        <div id="proposal-output-box" class="mt-4 p-3 bg-dark rounded border border-gold d-none">
-                            <h6 class="text-gold mb-2"><i class="fas fa-check-circle me-2"></i>Expirable Proposal Link Generated!</h6>
+                        <div id="proposal-output-box" class="mt-4 p-3 bg-light rounded border border-primary d-none">
+                            <h6 class="text-primary mb-2 fw-bold"><i class="fas fa-check-circle me-2"></i>Expirable Proposal Link Generated!</h6>
                             <div class="input-group mb-3">
                                 <input type="text" id="generated-url-field" class="form-control" readonly>
-                                <button class="btn btn-gold" id="copy-url-btn"><i class="fas fa-copy me-1"></i> Copy Link</button>
+                                <button class="btn btn-primary" id="copy-url-btn"><i class="fas fa-copy me-1"></i> Copy Link</button>
                             </div>
                             <a href="#" id="send-wa-link-btn" target="_blank" class="btn btn-success w-100">
                                 <i class="fab fa-whatsapp me-2"></i> Send Direct to Client on WhatsApp
@@ -298,24 +311,24 @@
                     <div class="bg-secondary rounded p-4 mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                             <div>
-                                <h3 style="font-family: 'Playfair Display', serif; color: var(--accent-gold); margin: 0;">Digital Catalog CRUD Manager</h3>
+                                <h3 class="text-primary fw-bold" style="font-family: 'Playfair Display', serif; margin: 0;">Digital Catalog CRUD Manager</h3>
                                 <small class="text-muted">Create, Edit, Update prices & specs, and Delete catalog designs with Cloud Database Sync</small>
                             </div>
-                            <button class="btn btn-outline-gold btn-sm" id="sync-cloud-catalog-btn">
+                            <button class="btn btn-outline-primary btn-sm" id="sync-cloud-catalog-btn">
                                 <i class="fas fa-cloud-upload-alt me-1"></i> Sync / Push to Cloud Database
                             </button>
                         </div>
 
                         <!-- Add New Item Form -->
-                        <form id="add-catalog-item-form" class="mb-5 p-3 bg-dark rounded border border-gold">
-                            <h5 class="text-gold mb-3"><i class="fas fa-plus-circle me-2"></i>Add New Catalog Item</h5>
+                        <form id="add-catalog-item-form" class="mb-5 p-4 bg-light rounded border">
+                            <h5 class="text-dark mb-3 fw-bold"><i class="fas fa-plus-circle me-2 text-primary"></i>Add New Catalog Item</h5>
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
-                                    <label class="form-label text-white">Design Title</label>
+                                    <label class="form-label text-dark fw-semibold">Design Title</label>
                                     <input type="text" id="add-item-title" class="form-control" placeholder="e.g. Pastel Rose & Gold Stage" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label text-white">Category</label>
+                                    <label class="form-label text-dark fw-semibold">Category</label>
                                     <select id="add-item-category" class="form-select">
                                         <option value="stage">Stage & Backdrops</option>
                                         <option value="pastel">Pastel Florals</option>
@@ -328,36 +341,36 @@
 
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
-                                    <label class="form-label text-white">Budget Price (₹)</label>
+                                    <label class="form-label text-dark fw-semibold">Budget Price (₹)</label>
                                     <input type="number" id="add-item-budget" class="form-control" placeholder="e.g. 150000" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label text-white">Dimensions (Width × Height)</label>
+                                    <label class="form-label text-dark fw-semibold">Dimensions (Width × Height)</label>
                                     <input type="text" id="add-item-width" class="form-control" placeholder="e.g. 20 ft Width × 12 ft Height" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label text-white">Image URL</label>
+                                    <label class="form-label text-dark fw-semibold">Image URL</label>
                                     <input type="url" id="add-item-image" class="form-control" placeholder="https://images.unsplash.com/..." required>
                                 </div>
                             </div>
 
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
-                                    <label class="form-label text-white">Included Props</label>
+                                    <label class="form-label text-dark fw-semibold">Included Props</label>
                                     <input type="text" id="add-item-props" class="form-control" placeholder="e.g. 3 Floral Arches, Velvet Sofa" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label text-white">Lighting Spec</label>
+                                    <label class="form-label text-dark fw-semibold">Lighting Spec</label>
                                     <input type="text" id="add-item-lights" class="form-control" placeholder="e.g. Warm LED Ambient Strips" required>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-gold"><i class="fas fa-save me-1"></i> Save Item to Catalog & Cloud</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Save Item to Catalog & Cloud</button>
                         </form>
 
                         <!-- Catalog Table Header & Search -->
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                            <h5 class="text-white mb-0">Current Catalog Designs (<span id="admin-catalog-count">0</span>)</h5>
+                            <h5 class="text-dark mb-0 fw-bold">Current Catalog Designs (<span id="admin-catalog-count">0</span>)</h5>
                             <input type="text" id="admin-catalog-search" class="form-control form-control-sm" style="width: 250px;" placeholder="Search catalog designs...">
                         </div>
 
@@ -383,13 +396,13 @@
                 </div>
 
                 <!-- ----------------------------------------------------------------------
-                     SECTION 4: CLIENT LEADS & INQUIRIES
+                     SECTION 4: CLIENT LEADS & ENQUIRIES
                      ---------------------------------------------------------------------- -->
                 <div id="leads-section" class="dashboard-tab-content d-none">
                     <div class="bg-secondary rounded p-4 mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
-                                <h3 style="font-family: 'Playfair Display', serif; color: var(--accent-gold); margin: 0;">Client Lead Inquiries</h3>
+                                <h3 class="text-primary fw-bold" style="font-family: 'Playfair Display', serif; margin: 0;">Client Leads & Enquiries</h3>
                                 <small class="text-muted">Real-time consultation requests synced from Cloud Firestore</small>
                             </div>
                         </div>
@@ -403,6 +416,7 @@
                                         <th>Event Date</th>
                                         <th>Preferred Theme</th>
                                         <th>Vision Details</th>
+                                        <th>Status Badge</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -425,20 +439,20 @@
     <div class="modal fade" id="editItemModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal-content-custom">
-                <div class="modal-header border-bottom border-gold">
-                    <h5 class="modal-title text-gold"><i class="fas fa-edit me-2"></i>Edit Catalog Item Details</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title text-primary font-weight-bold"><i class="fas fa-edit me-2"></i>Edit Catalog Item Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="edit-catalog-item-form">
                         <input type="hidden" id="edit-item-id">
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label text-white">Design Title</label>
+                                <label class="form-label text-dark fw-semibold">Design Title</label>
                                 <input type="text" id="edit-item-title" class="form-control" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-white">Category</label>
+                                <label class="form-label text-dark fw-semibold">Category</label>
                                 <select id="edit-item-category" class="form-select">
                                     <option value="stage">Stage & Backdrops</option>
                                     <option value="pastel">Pastel Florals</option>
@@ -451,33 +465,33 @@
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-4">
-                                <label class="form-label text-white">Budget Price (₹)</label>
+                                <label class="form-label text-dark fw-semibold">Budget Price (₹)</label>
                                 <input type="number" id="edit-item-budget" class="form-control" required>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label text-white">Dimensions</label>
+                                <label class="form-label text-dark fw-semibold">Dimensions</label>
                                 <input type="text" id="edit-item-width" class="form-control" required>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label text-white">Image URL</label>
+                                <label class="form-label text-dark fw-semibold">Image URL</label>
                                 <input type="url" id="edit-item-image" class="form-control" required>
                             </div>
                         </div>
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label text-white">Included Props</label>
+                                <label class="form-label text-dark fw-semibold">Included Props</label>
                                 <input type="text" id="edit-item-props" class="form-control" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-white">Lighting Spec</label>
+                                <label class="form-label text-dark fw-semibold">Lighting Spec</label>
                                 <input type="text" id="edit-item-lights" class="form-control" required>
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-gold"><i class="fas fa-save me-1"></i> Update & Sync Cloud</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Update & Sync Cloud</button>
                         </div>
                     </form>
                 </div>
@@ -490,10 +504,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/chart/chart.min.js"></script>
 
-    <!-- Firebase SDK (Modular CDN) -->
+    <!-- Firebase SDK (Modular CDN v12) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, getDocs, onSnapshot, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, getDocs, onSnapshot, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
         // Firebase Web Config
         const firebaseConfig = {
@@ -506,11 +520,21 @@
             appId: "1:120287922214:web:d6f7ca1b3fc406c284fee7"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        try {
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
 
-        window.firebaseDb = db;
-        window.firebaseFirestore = { collection, doc, setDoc, getDocs, onSnapshot, deleteDoc, serverTimestamp };
+            window.firebaseDb = db;
+            window.firebaseFirestore = { collection, doc, setDoc, getDocs, onSnapshot, deleteDoc, updateDoc, serverTimestamp };
+        } catch (err) {
+            console.error("Firebase Diagnostic Notice:", err);
+            const banner = document.getElementById('diagnostic-error-banner');
+            const bannerText = document.getElementById('diagnostic-error-text');
+            if (banner && bannerText) {
+                bannerText.textContent = `Firebase Connection Error: ${err.message}`;
+                banner.classList.remove('d-none');
+            }
+        }
     </script>
 
     <!-- Royal Blooms Admin Custom Script -->
