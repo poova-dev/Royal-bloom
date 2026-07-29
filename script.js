@@ -394,6 +394,31 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('royal_blooms_catalog', JSON.stringify(catalogItems));
     };
 
+    // Real-time Cloud Firestore Catalog Sync Listener
+    const listenToFirestoreCatalog = () => {
+        if (window.firebaseDb && window.firebaseFirestore) {
+            try {
+                const { collection, onSnapshot } = window.firebaseFirestore;
+                onSnapshot(collection(window.firebaseDb, 'catalog'), (snapshot) => {
+                    if (snapshot && snapshot.docs.length > 0) {
+                        const cloudItems = [];
+                        snapshot.forEach(docSnap => {
+                            cloudItems.push(docSnap.data());
+                        });
+                        if (cloudItems.length > 0) {
+                            catalogItems = cloudItems;
+                            saveCatalog();
+                            renderCatalogue();
+                        }
+                    }
+                });
+            } catch (e) {
+                console.warn("Firestore catalog listener notice:", e);
+            }
+        }
+    };
+    setTimeout(listenToFirestoreCatalog, 1500);
+
     // State Variables & Filter States
     let selectedBudget = 'all';
     let selectedCategory = 'all';
