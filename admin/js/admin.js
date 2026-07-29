@@ -141,8 +141,20 @@ document.addEventListener('DOMContentLoaded', () => {
     checkAuthStatus();
 
     // ----------------------------------------------------------------------
-    // 3. NAVIGATION TAB SWITCHER
+    // 3. SIDEBAR TOGGLER & NAVIGATION TAB SWITCHER
     // ----------------------------------------------------------------------
+    const sidebarToggler = document.querySelector('.sidebar-toggler');
+    const sidebar = document.querySelector('.sidebar');
+    const content = document.querySelector('.content');
+
+    if (sidebarToggler && sidebar && content) {
+        sidebarToggler.addEventListener('click', (e) => {
+            e.preventDefault();
+            sidebar.classList.toggle('open');
+            content.classList.toggle('open');
+        });
+    }
+
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
     const tabContents = document.querySelectorAll('.dashboard-tab-content');
 

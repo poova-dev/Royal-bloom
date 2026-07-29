@@ -1,167 +1,254 @@
 /* ==========================================================================
-   ROYAL BLOOMS DECOR - ADMIN DASHBOARD LUXURY STYLES
+   ROYAL BLOOMS DECOR - DASHMIN PROFESSIONAL DARK ADMIN THEME
    ========================================================================== */
 
 :root {
-    --accent-gold: #D4AF37;
-    --accent-gold-light: #F3E5AB;
-    --accent-gold-dark: #AA820A;
-    --accent-rose: #C5A059;
-    --bg-dark: #121212;
-    --bg-secondary: #1E1D1B;
-    --bg-card: #252422;
-    --text-light: #FAF7F2;
-    --text-muted: #B3AAA0;
-    --border-gold: rgba(212, 175, 55, 0.25);
-    --shadow-gold: 0 10px 30px rgba(212, 175, 55, 0.15);
+    --primary: #D4AF37;
+    --primary-hover: #F3E5AB;
+    --dark: #191C24;
+    --black: #000000;
+    --light-slate: #2A2E39;
+    --text-white: #FFFFFF;
+    --text-muted: #8F95B2;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-gold: rgba(212, 175, 55, 0.3);
+    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 body {
-    background-color: var(--bg-dark);
-    color: var(--text-light);
+    background-color: var(--black) !important;
+    color: var(--text-white);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Sidebar Custom Styling */
+/* Sidebar Custom Styling (Dashmin Signature Dark Slate) */
 .sidebar {
-    background: var(--bg-secondary) !important;
-    border-right: 1px solid var(--border-gold);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--dark) !important;
+    border-right: 1px solid var(--border-subtle);
+    transition: 0.4s;
+    z-index: 999;
 }
+
+.content {
+    margin-left: 260px;
+    min-height: 100vh;
+    background: var(--black) !important;
+    transition: 0.4s;
+}
+
+@media (min-width: 992px) {
+    .sidebar.open {
+        margin-left: -260px;
+    }
+    .content.open {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        margin-left: -260px;
+    }
+    .sidebar.open {
+        margin-left: 0;
+    }
+    .content {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+/* Sidebar Brand Header */
 .sidebar .navbar-brand h3 {
     font-family: 'Playfair Display', Georgia, serif;
-    color: var(--accent-gold) !important;
+    color: var(--primary) !important;
     font-weight: 700;
     letter-spacing: 1px;
 }
-.sidebar .navbar-nav .nav-link {
+
+/* Sidebar Nav Pills (Dashmin Curved Pill Active State) */
+.sidebar .navbar .navbar-nav .nav-link {
+    padding: 10px 20px;
     color: var(--text-muted);
-    padding: 0.75rem 1.25rem;
-    border-radius: 8px;
-    margin: 0.2rem 0.75rem;
     font-weight: 500;
+    font-size: 0.9rem;
+    border-left: 4px solid transparent;
+    border-radius: 0 30px 30px 0;
+    outline: none;
     transition: all 0.3s ease;
-}
-.sidebar .navbar-nav .nav-link i {
-    color: var(--accent-gold);
-    width: 24px;
-}
-.sidebar .navbar-nav .nav-link:hover,
-.sidebar .navbar-nav .nav-link.active {
-    background: rgba(212, 175, 55, 0.15);
-    color: var(--accent-gold) !important;
-    border-left: 3px solid var(--accent-gold);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
 }
 
-/* Navbar Custom Styling */
+.sidebar .navbar .navbar-nav .nav-link i {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    border-radius: 50%;
+    color: var(--primary);
+    margin-right: 12px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.sidebar .navbar .navbar-nav .nav-link:hover,
+.sidebar .navbar .navbar-nav .nav-link.active {
+    color: var(--primary) !important;
+    background: var(--black) !important;
+    border-left-color: var(--primary) !important;
+}
+
+.sidebar .navbar .navbar-nav .nav-link:hover i,
+.sidebar .navbar .navbar-nav .nav-link.active i {
+    background: var(--dark);
+    color: var(--text-white);
+}
+
+/* Top Navbar Styling */
 .navbar-custom {
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-gold);
+    background: var(--dark) !important;
+    border-bottom: 1px solid var(--border-subtle);
     padding: 0.75rem 1.5rem;
 }
 
-/* Glassmorphism Cards */
-.bg-secondary {
-    background-color: var(--bg-card) !important;
-    border: 1px solid var(--border-gold) !important;
-    border-radius: 14px !important;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+.sidebar-toggler {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    border-radius: 50%;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* KPI Cards */
+.sidebar-toggler:hover {
+    background: var(--primary);
+    color: var(--black);
+}
+
+/* Cards Styling (Dashmin Charcoal Slate) */
+.bg-secondary {
+    background-color: var(--dark) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-card);
+}
+
 .kpi-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 .kpi-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-gold);
-    border-color: var(--accent-gold) !important;
+    transform: translateY(-4px);
+    border-color: var(--primary) !important;
 }
+
 .kpi-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    background: rgba(212, 175, 55, 0.15);
-    border: 1px solid var(--accent-gold);
-    color: var(--accent-gold);
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: var(--black);
+    border: 1px solid var(--border-gold);
+    color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.35rem;
 }
 
 /* Buttons */
 .btn-gold {
-    background: linear-gradient(135deg, #D4AF37, #AA820A);
-    color: #121212;
+    background: var(--primary);
+    color: var(--black);
     font-weight: 600;
     border: none;
-    padding: 0.6rem 1.25rem;
+    padding: 0.55rem 1.25rem;
     border-radius: 8px;
     transition: all 0.3s ease;
 }
+
 .btn-gold:hover {
-    background: linear-gradient(135deg, #F3E5AB, #D4AF37);
-    color: #121212;
+    background: var(--primary-hover);
+    color: var(--black);
     box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
 }
 
 .btn-outline-gold {
-    border: 1px solid var(--accent-gold);
-    color: var(--accent-gold);
+    border: 1px solid var(--primary);
+    color: var(--primary);
     background: transparent;
-    padding: 0.5rem 1rem;
+    padding: 0.45rem 1rem;
     border-radius: 8px;
     transition: all 0.3s ease;
 }
+
 .btn-outline-gold:hover {
-    background: var(--accent-gold);
-    color: #121212;
+    background: var(--primary);
+    color: var(--black);
 }
 
 /* Form Controls */
 .form-control, .form-select {
-    background-color: #1A1918 !important;
-    border: 1px solid var(--border-gold) !important;
-    color: var(--text-light) !important;
+    background-color: var(--black) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: var(--text-white) !important;
     border-radius: 8px !important;
-    padding: 0.65rem 1rem;
+    padding: 0.6rem 1rem;
 }
+
 .form-control:focus, .form-select:focus {
-    border-color: var(--accent-gold) !important;
+    border-color: var(--primary) !important;
     box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
 }
 
 /* Table Styling */
 .table-custom {
-    color: var(--text-light);
+    color: var(--text-white);
 }
+
 .table-custom th {
-    background: rgba(212, 175, 55, 0.1);
-    color: var(--accent-gold);
-    border-bottom: 2px solid var(--accent-gold);
+    background: var(--black);
+    color: var(--primary);
+    border-bottom: 2px solid var(--border-gold);
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 0.5px;
 }
+
 .table-custom td {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--border-subtle);
     vertical-align: middle;
 }
+
 .cat-thumb-sm {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid var(--accent-gold);
+    border: 1px solid var(--border-gold);
 }
 
-/* Date Range Filter Toolbar */
+/* Date Range Filter Bar */
 .date-filter-bar {
-    background: rgba(212, 175, 55, 0.08);
-    border: 1px solid var(--border-gold);
+    background: var(--dark);
+    border: 1px solid var(--border-subtle);
     border-radius: 12px;
-    padding: 1rem;
+    padding: 0.85rem 1.25rem;
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
@@ -169,50 +256,53 @@ body {
     flex-wrap: wrap;
     gap: 1rem;
 }
+
 .preset-btn {
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    background: transparent;
+    border: 1px solid var(--border-subtle);
+    background: var(--black);
     color: var(--text-muted);
     padding: 0.35rem 0.85rem;
     border-radius: 6px;
     font-size: 0.825rem;
     transition: all 0.2s ease;
 }
+
 .preset-btn.active, .preset-btn:hover {
-    background: var(--accent-gold);
-    color: #121212;
+    background: var(--primary);
+    color: var(--black);
     font-weight: 600;
+    border-color: var(--primary);
 }
 
-/* Passcode Modal */
+/* Security Auth Modal Overlay */
 .auth-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(12px);
     z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .auth-modal-card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--accent-gold);
+    background: var(--dark);
+    border: 1px solid var(--border-gold);
     border-radius: 16px;
     padding: 2.5rem 2rem;
     max-width: 420px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
 }
 
-/* Modals */
 .modal-content-custom {
-    background: var(--bg-secondary) !important;
-    border: 1px solid var(--accent-gold) !important;
-    color: var(--text-light);
+    background: var(--dark) !important;
+    border: 1px solid var(--border-gold) !important;
+    color: var(--text-white);
     border-radius: 16px;
 }
