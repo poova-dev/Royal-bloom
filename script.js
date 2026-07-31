@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
        1. SCROLL-SENSITIVE NAVBAR GLASS EFFECT
        ---------------------------------------------------------------------- */
     const header = document.getElementById('main-header');
-    
+
     const handleScroll = () => {
         if (window.scrollY > 50) {
             header.classList.add('scrolled');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             header.classList.remove('scrolled');
         }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Init on load in case page is refreshed while scrolled
 
@@ -27,13 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileToggle = document.getElementById('mobile-toggle');
     const navMenu = document.getElementById('nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     if (mobileToggle && navMenu) {
         mobileToggle.addEventListener('click', () => {
             mobileToggle.classList.toggle('active');
             navMenu.classList.toggle('active');
         });
-        
+
         // Close menu drawer when clicking a link
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -52,55 +52,55 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentTestimonial = 0;
     const totalTestimonials = testimonialCards.length;
     let testimonialInterval;
-    
+
     const showTestimonial = (index) => {
         // Remove active state from current
         testimonialCards.forEach(card => {
             card.classList.remove('active');
             card.style.display = 'none';
         });
-        
+
         // Update index boundary
         currentTestimonial = (index + totalTestimonials) % totalTestimonials;
-        
+
         // Render target card with fade transition
         const activeCard = testimonialCards[currentTestimonial];
         activeCard.style.display = 'block';
-        
+
         // Trigger reflow to restart css animation
-        void activeCard.offsetWidth; 
+        void activeCard.offsetWidth;
         activeCard.classList.add('active');
     };
-    
+
     const nextTestimonial = () => {
         showTestimonial(currentTestimonial + 1);
     };
-    
+
     const prevTestimonial = () => {
         showTestimonial(currentTestimonial - 1);
     };
-    
+
     // Auto-scroll testimonials every 7 seconds
     const startAutoScroll = () => {
         testimonialInterval = setInterval(nextTestimonial, 7000);
     };
-    
+
     const resetAutoScroll = () => {
         clearInterval(testimonialInterval);
         startAutoScroll();
     };
-    
+
     if (prevBtn && nextBtn && totalTestimonials > 0) {
         prevBtn.addEventListener('click', () => {
             prevTestimonial();
             resetAutoScroll();
         });
-        
+
         nextBtn.addEventListener('click', () => {
             nextTestimonial();
             resetAutoScroll();
         });
-        
+
         // Start auto cycle
         startAutoScroll();
     }
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const afterImg = document.getElementById('after-img');
     const sliderHandle = document.getElementById('slider-handle');
     const sliderControl = document.getElementById('slider-control');
-    
+
     if (afterImg && sliderHandle && sliderControl) {
         const updateSlider = (value) => {
             // Apply clip-path to show proportional width of the decorated after image
@@ -119,11 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Slide the center divider handle
             sliderHandle.style.left = `${value}%`;
         };
-        
+
         sliderControl.addEventListener('input', (e) => {
             updateSlider(e.target.value);
         });
-        
+
         // Initialize position at 50%
         updateSlider(50);
     }
@@ -132,16 +132,16 @@ document.addEventListener('DOMContentLoaded', () => {
        5. INTERSECTION OBSERVER FOR METRIC COUNT-UPS
        ---------------------------------------------------------------------- */
     const statNumbers = document.querySelectorAll('.stat-number');
-    
+
     const animateCounter = (element) => {
         const target = parseInt(element.getAttribute('data-target'), 10);
         const duration = 2000; // Animation duration in milliseconds
         const stepTime = Math.abs(Math.floor(duration / target));
         let current = 0;
-        
+
         // Handle standard small step increments vs large values
         const increment = target > 100 ? Math.ceil(target / 100) : 1;
-        
+
         const timer = setInterval(() => {
             current += increment;
             if (current >= target) {
@@ -152,13 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, Math.max(stepTime, 20));
     };
-    
+
     // Observers trigger when statistics enter viewport
     const observerOptions = {
         threshold: 0.3,
         rootMargin: '0px'
     };
-    
+
     const counterObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, observerOptions);
-    
+
     statNumbers.forEach(num => {
         counterObserver.observe(num);
     });
@@ -176,11 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
        6. LUXURY FORM INTERACTION & LEADS SUBMISSION (FIRESTORE SYNC)
        ---------------------------------------------------------------------- */
     const leadForm = document.getElementById('wedding-lead-form');
-    
+
     if (leadForm) {
         leadForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             // Extract inputs
             const name = document.getElementById('client-name').value;
             const phone = document.getElementById('client-phone').value;
@@ -206,11 +206,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.warn("Firestore async save notice:", e);
                 }
             }
-            
+
             // Format WhatsApp prefilled message
             const waText = `Hi Royal Blooms! I just submitted an inquiry on your website.%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Phone:* ${encodeURIComponent(phone)}%0A*Event Date:* ${encodeURIComponent(date)}%0A*Preferred Theme:* ${encodeURIComponent(theme)}`;
             const waUrl = `https://wa.me/918939601257?text=${waText}`;
-            
+
             // Create elegant overlay glass notification
             const notification = document.createElement('div');
             notification.className = 'glass-card';
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
             notification.style.maxWidth = '450px';
             notification.style.width = '90%';
             notification.style.animation = 'fadeInUp 0.6s ease forwards';
-            
+
             notification.innerHTML = `
                 <span style="font-size: 3rem; color: #D4AF37; display: block; margin-bottom: 1rem;">❦</span>
                 <h3 style="font-size: 1.75rem; margin-bottom: 1rem; color: #FAF7F2;">Thank You, ${name}</h3>
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="${waUrl}" target="_blank" class="btn btn-secondary" style="width: 100%; display: block; text-align: center;">Open WhatsApp Chat</a>
                 <button id="close-notif-btn" style="background: none; border: none; color: #FAF7F2; margin-top: 1.25rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; opacity: 0.7;">Close Window</button>
             `;
-            
+
             // Dark Backdrop
             const backdrop = document.createElement('div');
             backdrop.style.position = 'fixed';
@@ -243,17 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
             backdrop.style.backgroundColor = 'rgba(18, 18, 18, 0.85)';
             backdrop.style.zIndex = '999';
             backdrop.style.backdropFilter = 'blur(5px)';
-            
+
             document.body.appendChild(backdrop);
             document.body.appendChild(notification);
-            
+
             const closeBtn = document.getElementById('close-notif-btn');
             const closeNotification = () => {
                 document.body.removeChild(notification);
                 document.body.removeChild(backdrop);
                 leadForm.reset();
             };
-            
+
             closeBtn.addEventListener('click', closeNotification);
             backdrop.addEventListener('click', closeNotification);
         });
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ---------------------------------------------------------------------- */
     const heroVideo = document.getElementById('hero-video');
     const driveSource = document.getElementById('drive-source');
-    
+
     if (heroVideo && driveSource) {
         driveSource.addEventListener('error', () => {
             console.warn("Primary Google Drive video failed to stream. Activating premium fallback...");
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load or initialize Catalog Data
     let catalogItems = JSON.parse(localStorage.getItem('royal_blooms_catalog')) || defaultCatalogItems;
-    
+
     // Save to LocalStorage helper
     const saveCatalog = () => {
         localStorage.setItem('royal_blooms_catalog', JSON.stringify(catalogItems));
@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!catalogGrid) return;
 
         catalogGrid.innerHTML = '';
-        
+
         const filtered = catalogItems.filter(item => {
             // Proposal ID filter (if active proposal link has picked items)
             if (proposalSelectedIds && proposalSelectedIds.length > 0) {
@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (isProposalModeActive) {
                 // Proposal Client Mode Empty State (Redirects to Consultation / WhatsApp, preserving scope)
-                const waMsg = `Hi Royal Blooms! I am viewing my proposal (${activeProposalId}) for ${activeProposalClientName} and would like to request additional custom decor options.`;
+                const waMsg = `Hi Royal Blooms! I am viewing my proposal Decor options for ${activeProposalClientName} and would like to request additional custom decor options.`;
                 const waUrl = `https://wa.me/918939601257?text=${encodeURIComponent(waMsg)}`;
 
                 emptyState.innerHTML = `
@@ -556,7 +556,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filtered.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'cat-card';
-                
+
                 // WhatsApp prefilled message per design
                 const waMsg = `Hi Royal Blooms! I am interested in your design: *${encodeURIComponent(item.title)}* (${item.budgetLabel}). Dimensions: ${encodeURIComponent(item.width)}. Could you please share slot availability and details?`;
                 const waUrl = `https://wa.me/918939601257?text=${waMsg}`;
