@@ -998,3 +998,212 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 }); // end DOMContentLoaded
+
+/* ═══════════════════════════════════════════════════════════════
+   USER MANAGEMENT MODULE
+   ═══════════════════════════════════════════════════════════════ */
+
+function filterUsersTable() {
+    const search = (document.getElementById('user-search')?.value || '').toLowerCase();
+    const role   = (document.getElementById('user-role-filter')?.value || '');
+    const status = (document.getElementById('user-status-filter')?.value || '');
+
+    document.querySelectorAll('#users-tbody .user-row').forEach(row => {
+        const text   = row.textContent.toLowerCase();
+        const rRole  = row.dataset.role   || '';
+        const rStat  = row.dataset.status || '';
+
+        const matchSearch = !search || text.includes(search);
+        const matchRole   = !role   || rRole === role;
+        const matchStatus = !status || rStat === status;
+
+        row.style.display = (matchSearch && matchRole && matchStatus) ? '' : 'none';
+    });
+}
+
+function openAddUserModal() {
+    // Build and show a lightweight Bootstrap modal dynamically
+    const existing = document.getElementById('add-user-modal');
+    if (existing) { existing.remove(); }
+
+    const modalHtml = `
+    <div class="modal fade" id="add-user-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background:var(--bg-card);border:1px solid var(--border-light);">
+                <div class="modal-header" style="border-bottom:1px solid var(--border-light);">
+                    <h5 class="modal-title" style="font-family:'Playfair Display',serif;color:var(--primary);">
+                        <i class="fas fa-user-plus me-2"></i>Add New User
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-user-form">
+                        <div class="mb-3">
+                            <label class="form-label" style="font-size:0.8rem;">Full Name</label>
+                            <input type="text" id="new-user-name" class="form-control" placeholder="e.g. Priya Nair" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" style="font-size:0.8rem;">Email Address</label>
+                            <input type="email" id="new-user-email" class="form-control" placeholder="priya@royalblooms.in" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" style="font-size:0.8rem;">Role</label>
+                            <select id="new-user-role" class="form-select">
+                                <option>Designer</option>
+                                <option>Coordinator</option>
+                                <option>Viewer</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" style="font-size:0.8rem;">Temporary Password</label>
+                            <input type="password" id="new-user-pass" class="form-control" placeholder="Min 6 characters" required>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus me-1"></i>Create User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    const modal = new bootstrap.Modal(document.getElementById('add-user-modal'));
+    modal.show();
+
+    document.getElementById('add-user-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name  = document.getElementById('new-user-name').value.trim();
+        const email = document.getElementById('new-user-email').value.trim();
+        const role  = document.getElementById('new-user-role').value;
+        const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+        const colors = {'Designer':'#4FC3F7','Coordinator':'#A78BFA','Viewer':'rgba(255,255,255,0.15)'};
+        const color  = colors[role] || '#C9A84C';
+
+        const tbody = document.getElementById('users-tbody');
+        if (!tbody) return;
+
+        const tr = document.createElement('tr');
+        tr.className = 'user-row';
+        tr.dataset.role   = role;
+        tr.dataset.status = 'Active';
+        tr.innerHTML = `
+            <td class="px-4 py-3 border-0">
+                <div class="d-flex align-items-center gap-3">
+                    <div style="width:36px;height:36px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#0D1117;flex-shrink:0;">${initials}</div>
+                    <div><div style="font-weight:600;color:var(--text-dark);">${name}</div><div style="font-size:0.75rem;color:var(--text-muted);">${email}</div></div>
+                </div>
+            </td>
+            <td class="px-4 py-3 border-0"><span class="pill" style="background:rgba(79,195,247,0.12);color:#4FC3F7;border:1px solid rgba(79,195,247,0.3);">${role}</span></td>
+            <td class="px-4 py-3 border-0" style="color:var(--text-muted);font-size:0.82rem;">Just now</td>
+            <td class="px-4 py-3 border-0"><span class="pill pill-active">Active</span></td>
+            <td class="px-4 py-3 border-0 text-end">
+                <button class="btn btn-sm me-1" style="background:rgba(255,255,255,0.05);border:1px solid var(--border-light);color:var(--text-muted);border-radius:6px;"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm" style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);color:#F87171;border-radius:6px;"><i class="fas fa-user-slash"></i></button>
+            </td>`;
+
+        tbody.appendChild(tr);
+        modal.hide();
+        _showToast(`User "${name}" created successfully.`, 'success');
+    });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NOTIFICATIONS MODULE
+   ═══════════════════════════════════════════════════════════════ */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Notification type filter buttons
+    document.querySelectorAll('.notif-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.notif-filter-btn').forEach(b => {
+                b.classList.remove('btn-primary', 'active');
+                b.style.background  = 'rgba(255,255,255,0.05)';
+                b.style.border      = '1px solid var(--border-light)';
+                b.style.color       = 'var(--text-muted)';
+            });
+            this.classList.add('btn-primary', 'active');
+            this.style.background = '';
+            this.style.border     = '';
+            this.style.color      = '';
+
+            const filter = this.dataset.filter;
+            document.querySelectorAll('#notif-list .notif-item').forEach(item => {
+                item.style.display = (filter === 'all' || item.dataset.type === filter) ? '' : 'none';
+            });
+        });
+    });
+});
+
+function markAllNotifRead() {
+    document.querySelectorAll('#notif-list .notif-item').forEach(item => {
+        item.style.opacity = '0.6';
+        item.style.background = '';
+        item.style.border = '';
+        const badge = item.querySelector('.badge');
+        if (badge) badge.remove();
+    });
+    const dot = document.getElementById('notif-nav-dot');
+    if (dot) dot.style.display = 'none';
+    _showToast('All notifications marked as read.', 'success');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REPORTS MODULE
+   ═══════════════════════════════════════════════════════════════ */
+
+function generateReport() {
+    const rows = [
+        ['Month','Gross Revenue (₹)','Total Leads','Proposals Sent','Conversion Rate'],
+        ['May 2026','620000','18','14','72%'],
+        ['June 2026','750000','21','16','68%'],
+        ['July 2026','840000','24','18','67%'],
+    ];
+
+    const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `royal-blooms-report-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    _showToast('Report exported as CSV successfully.', 'success');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SETTINGS MODULE
+   ═══════════════════════════════════════════════════════════════ */
+
+function saveSettings(btn) {
+    const original = btn.innerHTML;
+    btn.innerHTML  = '<i class="fas fa-spinner fa-spin me-1"></i>Saving…';
+    btn.disabled   = true;
+    setTimeout(() => {
+        btn.innerHTML = original;
+        btn.disabled  = false;
+        _showToast('Settings saved successfully.', 'success');
+    }, 900);
+}
+
+/* shared toast helper (safe re-use) */
+function _showToast(message, type = 'info') {
+    if (typeof showToast === 'function') { showToast(message, type); return; }
+    const colors = { success:'#34D399', error:'#F87171', info:'#4FC3F7', warning:'#FBBF24' };
+    const icons  = { success:'fas fa-check-circle', error:'fas fa-exclamation-circle', info:'fas fa-info-circle', warning:'fas fa-exclamation-triangle' };
+    const toast  = document.createElement('div');
+    toast.style.cssText = `
+        position:fixed;bottom:24px;right:24px;z-index:9999;
+        background:#1C2537;border:1px solid ${colors[type]};
+        color:var(--text-dark,#F0E6D3);border-radius:12px;
+        padding:12px 18px;display:flex;align-items:center;gap:10px;
+        box-shadow:0 8px 32px rgba(0,0,0,.4);backdrop-filter:blur(8px);
+        animation:toastIn .3s ease;max-width:340px;font-size:0.875rem;
+    `;
+    toast.innerHTML = `<i class="${icons[type]}" style="color:${colors[type]};flex-shrink:0;"></i><span>${message}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.opacity='0'; toast.style.transform='translateY(16px)'; toast.style.transition='.3s'; setTimeout(()=>toast.remove(),350); }, 3500);
+}
